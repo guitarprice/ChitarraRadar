@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0d10">
+<meta name="description" content="GuitarPrice — compare guitar prices and track price history.">
+<title>GuitarPrice — Guitar Price Intelligence</title>
+<style>
+:root{
+  --bg:#090b0e;--panel:#12161b;--panel2:#171c22;--line:#2a3038;
+  --text:#f5f7fa;--muted:#98a1ad;--soft:#cbd1d8;--accent:#f2f4f7;
+  --good:#9ee6c1;--goodbg:#123426;--warn:#f2d48a;--warnbg:#342b12;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#202731 0,#0b0d10 38%);color:var(--text);font-family:Inter,Arial,Helvetica,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.container{max-width:920px;margin:auto;padding:22px 16px 52px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:22px}
+.brand{display:flex;gap:11px;align-items:center}
+.logo-mark{width:42px;height:42px;border:1px solid var(--line);border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#1c2229,#0f1216);font-size:23px}
+.logo{font-size:27px;font-weight:850;letter-spacing:-.8px}
+.tagline{color:var(--muted);font-size:13px;margin-top:3px}
+.country{border:1px solid var(--line);border-radius:999px;padding:9px 12px;color:var(--soft);font-size:13px;white-space:nowrap;background:#101318}
+.hero{background:linear-gradient(145deg,#171c22,#11151a);border:1px solid var(--line);border-radius:24px;padding:22px;margin-bottom:22px;box-shadow:0 18px 50px rgba(0,0,0,.2)}
+.hero-top{display:flex;justify-content:space-between;gap:15px;align-items:center}
+.eyebrow{text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-size:11px;font-weight:700}
+.hero h1{font-size:31px;line-height:1.08;margin:7px 0 6px;letter-spacing:-1px}
+.hero p{margin:0;color:var(--muted);font-size:14px}
+.search-row{display:flex;gap:9px;margin-top:18px}
+.search-row input{flex:1;min-width:0;background:#0b0e12;border:1px solid #39414b;color:var(--text);border-radius:14px;padding:14px 15px;outline:none}
+.search-row input:focus{border-color:#7e8996;box-shadow:0 0 0 3px rgba(160,170,185,.08)}
+.primary{background:var(--accent);color:#11151a;border:0;border-radius:14px;padding:13px 19px;font-weight:800}
+.secondary{background:transparent;color:var(--soft);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-weight:700}
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.quick button{background:#101419;border:1px solid var(--line);color:var(--soft);border-radius:999px;padding:8px 11px;font-size:12px}
+.camera{background:#101419;border:1px dashed #46505c;color:var(--soft);border-radius:12px;padding:10px 12px;font-size:12px;font-weight:700}
+.product{display:grid;grid-template-columns:230px 1fr;gap:18px;align-items:stretch}
+.visual{min-height:235px;border-radius:20px;border:1px solid var(--line);background:radial-gradient(circle at 50% 35%,#343c46 0,#1c2229 35%,#0f1216 72%);display:grid;place-items:center;position:relative;overflow:hidden}
+.visual:before{content:"";width:86px;height:190px;border-radius:48% 48% 43% 43%;background:linear-gradient(90deg,#171b20,#8e969f,#22272e);transform:rotate(27deg);box-shadow:0 0 0 9px rgba(255,255,255,.025)}
+.visual:after{content:"GUITARPRICE";position:absolute;bottom:12px;left:14px;font-size:9px;letter-spacing:.16em;color:#737d88}
+.product-main{padding:2px 0}
+.product-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.product h2{font-size:28px;margin:5px 0 4px;letter-spacing:-.7px}
+.meta{color:var(--muted);font-size:13px}
+.badge{display:inline-block;border-radius:999px;padding:6px 9px;font-size:10px;font-weight:800;letter-spacing:.04em;background:var(--goodbg);color:var(--good)}
+.specs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.spec{background:#101419;border:1px solid var(--line);border-radius:12px;padding:10px}
+.spec b{display:block;font-size:12px}.spec span{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.tabs{display:flex;gap:7px;margin:18px 0 10px}
+.tab{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:8px 13px;font-size:12px;font-weight:800}
+.tab.active{background:#eef1f4;color:#11151a;border-color:#eef1f4}
+.offers{display:grid;gap:9px}
+.offer{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:13px}
+.store-logo{width:38px;height:38px;border-radius:11px;background:#20262e;display:grid;place-items:center;font-size:12px;font-weight:900;color:#dfe4ea;flex:0 0 auto}
+.store{flex:1;min-width:0}.store-name{font-weight:800;font-size:14px}.details{color:var(--muted);font-size:11px;margin-top:4px}
+.price-wrap{text-align:right}.price{font-size:18px;font-weight:900;white-space:nowrap}.best{display:inline-block;margin-top:4px;background:var(--goodbg);color:var(--good);border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900}
+.offer-link{margin-left:7px;background:transparent;color:var(--soft);border:1px solid var(--line);border-radius:9px;padding:7px 9px;font-size:11px;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:15px}.stat-label{color:var(--muted);font-size:10px;letter-spacing:.08em;font-weight:800}.stat-value{font-size:21px;font-weight:900;margin-top:5px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:17px;margin-top:16px}
+.card-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.card-title{font-weight:850}.card-subtitle{color:var(--muted);font-size:11px;margin-top:4px}
+.chart{height:150px;margin-top:12px;position:relative}.chart svg{width:100%;height:100%}.chart-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}
+.alert-row{display:flex;gap:8px;margin-top:13px}.alert-row input{max-width:170px;background:#0b0e12;border:1px solid #39414b;color:var(--text);border-radius:11px;padding:11px 12px}
+.message{color:var(--muted);font-size:11px;margin-top:9px}
+.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info{background:#101419;border:1px solid var(--line);border-radius:14px;padding:13px}.info b{font-size:12px}.info p{color:var(--muted);font-size:11px;line-height:1.45;margin:5px 0 0}
+footer{color:#6d7681;font-size:10px;line-height:1.5;margin-top:24px;text-align:center}
+@media(max-width:680px){.product{grid-template-columns:1fr}.visual{min-height:180px}.visual:before{height:145px}.hero h1{font-size:27px}}
+@media(max-width:500px){.container{padding:17px 13px 45px}.hero{padding:17px;border-radius:20px}.hero-top{align-items:flex-start}.search-row{flex-direction:column}.search-row .primary{width:100%}.stats{grid-template-columns:1fr}.specs{grid-template-columns:1fr 1fr}.offer{padding:11px}.offer-link{display:none}.price{font-size:16px}.country{padding:8px 10px}.logo{font-size:24px}.info-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="brand">
+    <div class="logo-mark">🎸</div>
+    <div><div class="logo">GuitarPrice</div><div class="tagline">Real-time guitar price intelligence</div></div>
+  </div>
+  <div class="country">🇮🇹 Italy</div>
+</header>
+
+<section class="hero">
+  <div class="hero-top">
+    <div><div class="eyebrow">Guitar price comparison</div><h1>Find the right guitar at the right price.</h1><p>Compare offers, condition and price history in one place.</p></div>
+    <button class="camera" onclick="photoComingSoon()">📷 Photo ID</button>
+  </div>
+  <div class="search-row">
+    <input id="search" type="search" value="Gibson Lucille" placeholder="Brand + model" onkeydown="if(event.key==='Enter')searchGuitar()">
+    <button class="primary" onclick="searchGuitar()">Search</button>
+  </div>
+  <div class="quick">
+    <button onclick="quickSearch('Gibson Lucille')">Gibson Lucille</button>
+    <button onclick="quickSearch('Fender Stratocaster American Professional II')">Fender Strat</button>
+    <button onclick="quickSearch('PRS SE Custom 24')">PRS SE Custom 24</button>
+  </div>
+</section>
+
+<section class="product">
+  <div class="visual" aria-label="Product visual"></div>
+  <div class="product-main">
+    <div class="eyebrow">Matched product</div>
+    <div class="product-head"><div><h2 id="productName">Gibson Lucille</h2><div class="meta" id="productMeta">Electric guitar · New · Italy</div></div><span class="badge">DEMO DATA</span></div>
+    <div class="specs">
+      <div class="spec"><b id="brand">Gibson</b><span>Brand</span></div>
+      <div class="spec"><b id="model">Lucille</b><span>Model</span></div>
+      <div class="spec"><b id="condition">New</b><span>Condition</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="tabs">
+  <button class="tab active" id="newTab" onclick="setCondition('New')">NEW</button>
+  <button class="tab" id="usedTab" onclick="setCondition('Used')">USED</button>
+</div>
+<section class="offers" id="offers"></section>
+
+<section class="stats">
+  <div class="stat"><div class="stat-label">LOWEST</div><div class="stat-value" id="lowest">€2,899</div></div>
+  <div class="stat"><div class="stat-label">AVERAGE</div><div class="stat-value" id="average">€3,052</div></div>
+  <div class="stat"><div class="stat-label">HIGHEST</div><div class="stat-value" id="highest">€3,299</div></div>
+</section>
+
+<section class="card">
+  <div class="card-head"><div><div class="card-title">12-month price history</div><div class="card-subtitle">Illustrative beta data — real history will come from connected sources.</div></div><div class="eyebrow">EUR</div></div>
+  <div class="chart">
+    <svg viewBox="0 0 760 150" preserveAspectRatio="none" aria-label="Illustrative price chart">
+      <path d="M8 112 L100 96 L190 104 L285 78 L380 88 L475 61 L570 72 L665 48 L752 59" fill="none" stroke="#e4e8ed" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 112 L100 96 L190 104 L285 78 L380 88 L475 61 L570 72 L665 48 L752 59 L752 140 L8 140 Z" fill="rgba(220,225,232,.06)"/>
+      <line x1="8" y1="140" x2="752" y2="140" stroke="#3b434d" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="chart-labels"><span>12 months ago</span><span>Today</span></div>
+</section>
+
+<section class="card">
+  <div class="card-title">🔔 Price alert</div>
+  <div class="card-subtitle">Set a target and we will use it in the future alert system.</div>
+  <div class="alert-row"><input id="target" type="number" value="2700" placeholder="Target €"><button class="primary" onclick="setAlert()">Set alert</button></div>
+  <div class="message" id="alertMessage"></div>
+</section>
+
+<section class="card">
+  <div class="card-title">Why GuitarPrice?</div>
+  <div class="info-grid" style="margin-top:12px">
+    <div class="info"><b>Exact model matching</b><p>Separate the exact guitar from similar-looking variants and finishes.</p></div>
+    <div class="info"><b>Delivered price</b><p>Future versions can include shipping, VAT and local availability.</p></div>
+    <div class="info"><b>New + used</b><p>Compare new retail offers with second-hand market listings.</p></div>
+    <div class="info"><b>Price intelligence</b><p>Track historical prices and identify meaningful price changes.</p></div>
+  </div>
+</section>
+
+<footer>
+  GuitarPrice Beta v0.2 · UI prototype<br>
+  Prices shown here are illustrative demo data, not live retailer prices.<br>
+  Future versions will use authorised retailer feeds, APIs and affiliate sources.
+</footer>
+</div>
+
+<script>
+const database={
+  "Gibson Lucille":{
+    brand:"Gibson",model:"Lucille",meta:"Electric guitar · New · Italy",
+    new:[
+      ["Thomann",2899,"In stock"],["Music Store",2949,"In stock"],["StrumentiMusicali.net",3019,"In stock"],["Amazon",3149,"In stock"],["Gibson",3299,"In stock"]
+    ],
+    used:[["Mercatino Musicale",2750,"Used"],["Mercatino Musicale",2590,"Used"]]
+  },
+  "Fender Stratocaster American Professional II":{
+    brand:"Fender",model:"Stratocaster American Professional II",meta:"Electric guitar · New · Italy",
+    new:[["Thomann",1699,"In stock"],["Music Store",1749,"In stock"],["StrumentiMusicali.net",1829,"In stock"],["Amazon",1799,"In stock"],["Fender",1899,"In stock"]],
+    used:[["Mercatino Musicale",1350,"Used"],["Reverb",1420,"Used"]]
+  },
+  "PRS SE Custom 24":{
+    brand:"PRS",model:"SE Custom 24",meta:"Electric guitar · New · Italy",
+    new:[["Thomann",849,"In stock"],["Music Store",879,"In stock"],["StrumentiMusicali.net",899,"In stock"],["Amazon",919,"In stock"],["PRS",999,"In stock"]],
+    used:[["Mercatino Musicale",650,"Used"],["Reverb",690,"Used"]]
+  }
+};
+
+let currentProduct="Gibson Lucille",currentCondition="New";
+
+function euro(n){return "€"+Number(n).toLocaleString("it-IT")}
+function findProduct(q){
+  const keys=Object.keys(database);
+  return keys.find(k=>k.toLowerCase()===q.toLowerCase())||keys.find(k=>k.toLowerCase().includes(q.toLowerCase()))||keys.find(k=>q.toLowerCase().includes(k.toLowerCase()));
+}
+function searchGuitar(){
+  const q=document.getElementById("search").value.trim();
+  const found=findProduct(q);
+  if(!found){document.getElementById("offers").innerHTML='<div class="card" style="margin-top:0">No matching demo product found. Try Gibson Lucille, Fender Strat or PRS SE Custom 24.</div>';return}
+  currentProduct=found;render();
+}
+function quickSearch(q){document.getElementById("search").value=q;currentCondition="New";render()}
+function setCondition(c){currentCondition=c;render()}
+function render(){
+  const p=database[currentProduct], list=p[currentCondition==="Used"?"used":"new"].slice().sort((a,b)=>a[1]-b[1]);
+  document.getElementById("productName").textContent=currentProduct;
+  document.getElementById("productMeta").textContent=p.meta.replace("New",currentCondition);
+  document.getElementById("brand").textContent=p.brand;
+  document.getElementById("model").textContent=p.model;
+  document.getElementById("condition").textContent=currentCondition;
+  document.getElementById("newTab").classList.toggle("active",currentCondition==="New");
+  document.getElementById("usedTab").classList.toggle("active",currentCondition==="Used");
+  const prices=list.map(x=>x[1]),lo=Math.min(...prices),hi=Math.max(...prices),avg=Math.round(prices.reduce((a,b)=>a+b,0)/prices.length);
+  document.getElementById("lowest").textContent=euro(lo);
+  document.getElementById("average").textContent=euro(avg);
+  document.getElementById("highest").textContent=euro(hi);
+  document.getElementById("offers").innerHTML=list.map((o,i)=>`
+    <div class="offer">
+      <div class="store-logo">${o[0].slice(0,2).toUpperCase()}</div>
+      <div class="store"><div class="store-name">${o[0]}</div><div class="details">${o[2]} · Demo offer</div></div>
+      <div class="price-wrap"><div class="price">${euro(o[1])}</div>${i===0?'<span class="best">LOWEST</span>':''}</div>
+      <button class="offer-link" onclick="offerInfo('${o[0]}')">View</button>
+    </div>`).join("");
+}
+function offerInfo(store){alert(store+" offer link will be connected when authorised retailer feeds/affiliate links are added.")}
+function setAlert(){
+  const target=Number(document.getElementById("target").value);
+  document.getElementById("alertMessage").textContent=target>0?`Demo alert set for ${currentProduct} at ${euro(target)}. Persistent notifications will be added in a future version.`:"Enter a valid target price.";
+}
+function photoComingSoon(){alert("Photo ID is planned for a future version: take a guitar photo → identify the model → compare prices.")}
+render();
+</script>
+</body>
+</html>
